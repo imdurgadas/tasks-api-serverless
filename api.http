@@ -1,0 +1,24 @@
+@host= https://857f3xa8g3.execute-api.ap-south-1.amazonaws.com
+
+POST {{host}}/tasks
+Content-Type: application/json
+Authorization: user-deny
+
+{
+    "id": 5,
+    "title": "My 4 note",
+    "desc": "Do XYZ"
+}
+
+###
+PUT {{host}}/tasks/2
+Content-Type: application/json
+
+{
+    "id": 2,
+    "title": "My Second note updated",
+    "desc": "Do XYZ updated"
+}
+###
+GET {{host}}/tasks
+Authorization: user-allow

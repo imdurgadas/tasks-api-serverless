@@ -1,0 +1,17 @@
+{
+  "name": "tasks-api-serverless",
+  "version": "1.0.0",
+  "description": "Tasks API using Serverless Framework and AWS",
+  "scripts": {
+   
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.1204.0"
+  },
+  "devDependencies": {
+    "serverless-iam-roles-per-function": "^3.2.0"
+  }
+}

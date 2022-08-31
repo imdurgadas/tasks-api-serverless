@@ -1,0 +1,82 @@
+service: tasks-api-serverless
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: dev
+  region: ap-south-1
+  memorySize: 128
+  logRetentionInDays: 1
+  environment:
+    TASKS_TABLE_NAME: !Ref TasksTable
+    REGION: ${self:provider.region}
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+  httpApi:
+    authorizers:
+      tokenAuth:
+        type: request
+        identitySource:
+          - $request.header.Authorization
+        functionName: tokenAuthorizer
+
+
+functions:
+  tokenAuthorizer:
+    handler: src/authorizers/tokenAuthorizer.handler
+  createNote:
+    handler: src/handlers/createTask.handler
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - dynamodb:PutItem
+        Resource: !GetAtt TasksTable.Arn
+    events:
+      - httpApi:
+          path: /tasks
+          method: post
+          authorizer: tokenAuth
+  updateNote:
+    handler: src/handlers/updateTask.handler
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - dynamodb:UpdateItem
+        Resource: !GetAtt TasksTable.Arn
+    events:
+      - httpApi:
+          path: /tasks/{id}
+          method: put
+          authorizer: tokenAuth          
+  getNotes:
+    handler: src/handlers/getTasks.handler
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - dynamodb:Scan
+        Resource: !GetAtt TasksTable.Arn
+    events:
+      - httpApi:
+          path: /tasks
+          method: get
+          authorizer: tokenAuth
+
+resources:
+  Resources:
+    TasksTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: N
+        BillingMode: PAY_PER_REQUEST
+        TableName: Tasks
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+
+plugins:
+  - serverless-iam-roles-per-function
