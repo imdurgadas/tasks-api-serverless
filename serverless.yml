@@ -20,6 +20,11 @@ provider:
           - $request.header.Authorization
         functionName: tokenAuthorizer
 
+      jwtCognitoAuthorizer:
+        type: jwt
+        identitySource: $request.header.Authorization
+        issuerUrl: https://cognito-idp.ap-south-1.amazonaws.com/${self:custom.cognito-user-pool-id} ##domain/poolId
+        audience: ${self:custom.cognito-client-id} 
 
 functions:
   tokenAuthorizer:
@@ -62,7 +67,7 @@ functions:
       - httpApi:
           path: /tasks
           method: get
-          authorizer: tokenAuth
+          authorizer: jwtCognitoAuthorizer
 
 resources:
   Resources:
@@ -80,3 +85,7 @@ resources:
 
 plugins:
   - serverless-iam-roles-per-function
+
+custom:
+  cognito-user-pool-id: 
+  cognito-client-id: 
