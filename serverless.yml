@@ -12,6 +12,7 @@ provider:
     TASKS_TABLE_NAME: !Ref TasksTable
     REGION: ${self:provider.region}
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+
   httpApi:
     authorizers:
       tokenAuth:
@@ -23,8 +24,14 @@ provider:
       jwtCognitoAuthorizer:
         type: jwt
         identitySource: $request.header.Authorization
-        issuerUrl: https://cognito-idp.ap-south-1.amazonaws.com/${self:custom.cognito-user-pool-id} ##domain/poolId
-        audience: ${self:custom.cognito-client-id} 
+        audience: ${self:custom.COGNITO_USER_POOL_CLIENT}
+        issuerUrl:
+          Fn::Join:
+              - ""
+              - - "https://cognito-idp."
+                - "${opt:region, self:provider.region}"
+                - ".amazonaws.com/"
+                - ${self:custom.COGNITO_USER_POOL_ID}
 
 functions:
   tokenAuthorizer:
@@ -69,23 +76,13 @@ functions:
           method: get
           authorizer: jwtCognitoAuthorizer
 
-resources:
-  Resources:
-    TasksTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: N
-        BillingMode: PAY_PER_REQUEST
-        TableName: Tasks
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
-
 plugins:
   - serverless-iam-roles-per-function
 
+resources:
+  Resources:
+    ${file(resources.yml)}
+
 custom:
-  cognito-user-pool-id: 
-  cognito-client-id: 
+  COGNITO_USER_POOL_ID: !Ref CognitoUserPool
+  COGNITO_USER_POOL_CLIENT: !Ref CognitoUserPoolClient
