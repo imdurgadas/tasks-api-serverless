@@ -81,7 +81,10 @@ plugins:
 
 resources:
   Resources:
-    ${file(resources.yml)}
+    TasksTable: ${file(resources/TaskTable.yml):TasksTable}
+    CognitoUserPool: ${file(resources/Cognito.yml):CognitoUserPool}
+    CognitoUserPoolClient: ${file(resources/Cognito.yml):CognitoUserPoolClient}
+    CognitoUserPoolDomain: ${file(resources/Cognito.yml):CognitoUserPoolDomain}
 
 custom:
   COGNITO_USER_POOL_ID: !Ref CognitoUserPool
