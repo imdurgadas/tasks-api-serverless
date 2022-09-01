@@ -1,11 +1,15 @@
 service: tasks-api-serverless
 frameworkVersion: "3"
 
+package:
+  individually: true
+
+
 provider:
   name: aws
   runtime: nodejs16.x
   stage: ${opt:stage, 'dev'}
-  region: ap-south-1
+  region: ${opt:region, 'ap-south-1'}
   memorySize: 128
   logRetentionInDays: 1
   environment:
@@ -79,7 +83,8 @@ functions:
 
 plugins:
   - serverless-iam-roles-per-function
-
+  - serverless-plugin-include-dependencies
+  
 resources:
   Resources:
     TasksTable: ${file(resources/TaskTable.yml):TasksTable}
