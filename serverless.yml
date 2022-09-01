@@ -25,13 +25,14 @@ provider:
         type: jwt
         identitySource: $request.header.Authorization
         audience: ${self:custom.COGNITO_USER_POOL_CLIENT}
-        issuerUrl:
-          Fn::Join:
-              - ""
-              - - "https://cognito-idp."
-                - "${opt:region, self:provider.region}"
-                - ".amazonaws.com/"
-                - ${self:custom.COGNITO_USER_POOL_ID}
+        issuerUrl: !Join ["", [ "https://cognito-idp.", "${opt:region, self:provider.region}", ".amazonaws.com/", "${self:custom.COGNITO_USER_POOL_ID}" ] ]
+        # issuerUrl:
+        #   Fn::Join:
+        #       - ""
+        #       - - "https://cognito-idp."
+        #         - "${opt:region, self:provider.region}"
+        #         - ".amazonaws.com/"
+        #         - ${self:custom.COGNITO_USER_POOL_ID}
 
 functions:
   tokenAuthorizer:
