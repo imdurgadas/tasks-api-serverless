@@ -6,7 +6,7 @@ TasksTable:
       - AttributeName: id
         AttributeType: N
     BillingMode: PAY_PER_REQUEST
-    TableName: Tasks
+    TableName: tasks-${self:provider.stage}
     KeySchema:
       - AttributeName: id
         KeyType: HASH

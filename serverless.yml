@@ -4,7 +4,7 @@ frameworkVersion: "3"
 provider:
   name: aws
   runtime: nodejs16.x
-  stage: dev
+  stage: ${opt:stage, 'dev'}
   region: ap-south-1
   memorySize: 128
   logRetentionInDays: 1

@@ -2,7 +2,7 @@
 CognitoUserPool:
   Type: AWS::Cognito::UserPool
   Properties:
-    UserPoolName: TasksUserPool
+    UserPoolName: TasksUserPool-${self:provider.stage}
     UsernameAttributes:
       - email
 
@@ -11,7 +11,7 @@ CognitoUserPoolClient:
   Type: AWS::Cognito::UserPoolClient
   Properties:
     UserPoolId: !Ref CognitoUserPool
-    ClientName: WebClient
+    ClientName: WebClient-${self:provider.stage}
     AllowedOAuthFlowsUserPoolClient: true
     AllowedOAuthScopes:
       - email
@@ -29,5 +29,5 @@ CognitoUserPoolClient:
 CognitoUserPoolDomain:
   Type: AWS::Cognito::UserPoolDomain
   Properties: 
-    Domain: tasksauthidp
+    Domain: tasksauthidp-${self:provider.stage}
     UserPoolId: !Ref CognitoUserPool
