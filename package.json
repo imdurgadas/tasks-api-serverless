@@ -7,7 +7,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.1204.0"
+    "aws-sdk": "2.1240.0"
   },
   "devDependencies": {
     "glob": "^8.0.3",
