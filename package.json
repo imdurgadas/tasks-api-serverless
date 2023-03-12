@@ -10,7 +10,7 @@
     "aws-sdk": "^2.1204.0"
   },
   "devDependencies": {
-    "glob": "^8.0.3",
+    "glob": "^9.0.0",
     "serverless-iam-roles-per-function": "^3.2.0",
     "serverless-plugin-include-dependencies": "^5.0.0"
   }
